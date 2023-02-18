@@ -1,6 +1,7 @@
 import os
 from tkinter import *
 from tkinter import filedialog
+import customtkinter
 
 width = 600
 height= 400
@@ -36,6 +37,7 @@ button.pack(padx=50, pady = 50)
 button.place(x = width - 150, y = 10)
 
 
+
 #   Make shorten button
 # shortenButton['font'] = getFont("Helvetica", 12, "normal")
 
@@ -49,11 +51,17 @@ def openFileDialogForExtraction():
     win.filename = filedialog.askopenfilename(initialdir=os.path.normpath("C://"), title = "Select A Binary File", filetypes=(("binary files", "*.bin"),))
     pass
 
-compressButton = Button(win, text = "Compress File", command = openFileDialogForCompression)
-compressButton.place(x = 3*width/4 , y =height/2 - 30)
 
-extractButton = Button(win, text = "Extract File", command = openFileDialogForExtraction)
-extractButton.place(x = 3*width/4 , y =height/2 + 50)
+# Use CTkButton instead of tkinter Button
+compressButton = customtkinter.CTkButton(master=win, text="Compress file", command=openFileDialogForCompression)
+compressButton.place(x = 3*width/4 , y =height/2 - 30, anchor=CENTER)
 
+
+# extractButton = Button(win, text = "Extract File", command = openFileDialogForExtraction)
+# extractButton.place(x = 3*width/4 , y =height/2 + 50)
+
+# Use CTkButton instead of tkinter Button
+extractButton = customtkinter.CTkButton(master=win, text="Extract file", command=openFileDialogForExtraction)
+extractButton.place(x = 3*width/4 , y =height/2 + 50, anchor=CENTER)
 
 win.mainloop()
