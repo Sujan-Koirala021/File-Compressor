@@ -3,6 +3,9 @@ import heapq
 myText = "aaadeff"
 frequencyDictionary = {}
 
+#   Frequency dictionary only works
+#   May ignore other and start on your own
+
 class HuffmanTree:
     def __init__(self, myText):
         self.myText = myText
@@ -57,7 +60,7 @@ class HuffmanTree:
     def decompress(self):
         pass
     
-tree = HuffmanTree(myText);
-tree.compress()
-tree.heapify()
+# tree = HuffmanTree(myText);
+# tree.compress()
+# tree.heapify()
 print(frequencyDictionary)
