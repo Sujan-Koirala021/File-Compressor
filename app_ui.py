@@ -70,7 +70,7 @@ def extractFile():
     pass
 
 #   Place theme button with light theme default
-button = Button(win, image=lightState, bd = 0, bg = darkThemeBg, activebackground=darkThemeBg,font = buttonFont, command = switchMode)
+button = Button(win, image=lightState, bd = 0, bg = darkThemeBg, activebackground=darkThemeBg, command = switchMode)
 button.pack(padx=50, pady = 50)
 button.place(x = width - 150, y = 10)
 
