@@ -4,6 +4,9 @@ from tkinter import filedialog
 import customtkinter
 import tkinter.font as font
 
+#   Import compressor file
+from compressor import *
+
 width = 600
 height= 400
 lightThemeBg = "#26242f"
@@ -56,9 +59,15 @@ def switchMode():
 def compressFile():
     #  openFileDialog for file compression
     win.filename = filedialog.askopenfilename(initialdir=os.path.normpath("C://"), title = "Select A Text File", filetypes=(("text files", "*.txt"),)) # may use this for all files, ("all files", "*.*")
-    print(win.filename) # This prints out selected file name
+    file_path =win.filename # This prints out selected file name
     # NOw proceed to apply algorithm from this filename
     # Better pass this filename as parameter to function from another file to do operation
+    compressFile=compress(file_path)
+    compressFile.compressor()
+    
+    #   Bin file saved to same location as txt file
+    
+    
     
     pass
 
