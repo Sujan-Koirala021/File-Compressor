@@ -14,7 +14,13 @@ darkThemeBg = "#dee4e7"
 
 win = Tk()
 win.title("File Compressor")
-win.iconbitmap("imgs/app_icon.ico")
+
+if 'posix' == os.name:
+    img = PhotoImage(file="imgs/app_icon.gif")
+    win.iconphoto(True,img)
+else:
+    win.iconbitmap("imgs/app_icon.ico")
+
 
 #   Set window size
 
@@ -62,8 +68,8 @@ def compressFile():
     file_path =win.filename # This prints out selected file name
     # NOw proceed to apply algorithm from this filename
     # Better pass this filename as parameter to function from another file to do operation
-    compressFile=compress(file_path)
-    compressFile.compressor()
+    compressFile=compress()
+    compressFile.compressor(file_path)
     
     #   Bin file saved to same location as txt file
     
@@ -74,9 +80,11 @@ def compressFile():
 def extractFile():
     #    open file dialog for file extraction
     win.filename = filedialog.askopenfilename(initialdir=os.path.normpath("C://"), title = "Select A Binary File", filetypes=(("binary files", "*.bin"),))
+    file_path =win.filename # This prints out selected file name
     print(win.filename) # This prints out selected file name
     # NOw proceed to apply algorithm from this filename
-    pass
+    decompressFile = compress()
+    decompressFile.decompressor(file_path)
 
 #   Place theme button with light theme default
 button = Button(win, image=lightState, bd = 0, bg = darkThemeBg, activebackground=darkThemeBg, command = switchMode)

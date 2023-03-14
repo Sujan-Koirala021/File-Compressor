@@ -2,8 +2,7 @@ import os
 import heapq
 
 class compress:
-    def __init__(self,path):
-        self.filePath=path
+    def __init__(self):
         self.heapQueue=[]
         self.codeDict={}
 
@@ -86,9 +85,9 @@ class compress:
         extraPaddingText= 8- len(encodedTexts) % 8
         for index in range(extraPaddingText):
             encodedTexts+="0"
-        
         #Add the number of padding lenth to the text for decompression
         extraPaddingInfo= "{0:08b}".format(extraPaddingText)
+        
         encodedTexts+=extraPaddingInfo
         
         return encodedTexts
@@ -103,12 +102,14 @@ class compress:
         return byteArray
         
 
-    def compressor(self):
+    def compressor(self,filePath):
         """This section compresses the file"""
-        fileName,fileExtention=os.path.splitext(self.filePath)
+        fileName,fileExtention=os.path.splitext(filePath)
         outputFilePath=fileName + ".bin"
         
-        with open(self.filePath,"rb") as file, open(outputFilePath,"wb") as outputFile:
+        
+        with open(filePath,"rb") as file, open(outputFilePath,"wb") as outputFile:
+
 
             
             binaryfileText=file.read()
@@ -125,22 +126,24 @@ class compress:
             paddedEncodedText=self.padText(encodedText)
 
             paddedEncodedTextByte=self.getInByte(paddedEncodedText)
-            outputFile.write(bytes(paddedEncodedTextByte))
-
-        
-        with open(outputFilePath,"ab") as outputFile:
             """lenth of code in 00000012"""
-            lenth_to_be_added=8-len(str(len(str(self.codeDict))))
-            lengthofCodeIn8digit=str(len(str(self.codeDict)))
+            revCodeDict= {v:k for k,v in self.codeDict.items()}
+            lenth_to_be_added=8-len(str(len(str(revCodeDict))))
+            lengthofCodeIn8digit=str(len(str(revCodeDict)))
 
             for index in range(lenth_to_be_added):
                 lengthofCodeIn8digit= "0"+ lengthofCodeIn8digit
 
-            toAddCodeDict=str(self.codeDict)+lengthofCodeIn8digit
+            toAddCodeDict=lengthofCodeIn8digit+str(revCodeDict)
             outputFile.write(toAddCodeDict.encode())
+
+            outputFile.write(bytes(paddedEncodedTextByte))
+
+
+
             """         The file is in format 
             ---------------------------------------------------------------------------------------------------------------------
-            (huffman code values for file in binary format)+(0's to complete in 8 bit format)+(no of 0's added in 8 bit binary format eg:00001101)+(codeDictionary for converting in huffman code stored in binary format only no huffman code used for this)+(length of codeDictionary added )
+            (codeDictionary for converting in huffman code stored in binary format only no huffman code used for this)+(length of codeDictionary added ) + (huffman code values for file in binary format)+(0's to complete in 8 bit format)+(no of 0's added in 8 bit binary format eg:00001101))
             ---------------------------------------------------------------------------------------------------------------------
 
             here codeDictionary is in format:
@@ -150,9 +153,34 @@ class compress:
 
 
             sample from sample.bin
-            .....................xc7\x95\x19\xae\xf9\xf1\xdblsP\xda\x1b\xdf?8\xcd\xfc\xdb\x9e0\xd9"%\x85\xf7\x95\x18\xe2\xc9\xc0\x05{101: \'000\', 105: \'001\', 98: \'010000\', 44: \'010001\', 33: \'01001000\', 78: \'0100100100\', 81: \'0100100101\', 68: \'0100100110\', 84: \'010010011100\', 70: \'010010011101\', 79: \'01001001111\', 104: \'01001010\', 80: \'01001011000\', 77: \'01001011001\', 69: \'0100101101\', 65: \'0100101110\', 67: \'01001011110\', 83: \'01001011111\', 102: \'0100110\', 46: \'01001110\', 120: \'01001111\', 111: \'0101\', 99: \'01100\', 112: \'01101\', 115: \'0111\', 32: \'100\', 116: \'1010\', 100: \'10110\', 108: \'10111\', 117: \'1100\', 97: \'1101\', 113: \'111000\', 63: \'111001000\', 73: \'11100100100\', 82: \'11100100101\', 66: \'1110010011000\', 85: \'11100100110010\', 72: \'11100100110011\', 76: \'111001001101\', 86: \'11100100111\', 103: \'11100101\', 118: \'1110011\', 110: \'11101\', 114: \'11110\', 109: \'11111\'}00000738'
+            00000738{101: \'000\', 105: \'001\', 98: \'010000\', 44: \'010001\', 33: \'01001000\', 78: \'0100100100\', 81: \'0100100101\', 68: \'0100100110\', 84: \'010010011100\', 70: \'010010011101\', 79: \'01001001111\', 104: \'01001010\', 80: \'01001011000\', 77: \'01001011001\', 69: \'0100101101\', 65: \'0100101110\', 67: \'01001011110\', 83: \'01001011111\', 102: \'0100110\', 46: \'01001110\', 120: \'01001111\', 111: \'0101\', 99: \'01100\', 112: \'01101\', 115: \'0111\', 32: \'100\', 116: \'1010\', 100: \'10110\', 108: \'10111\', 117: \'1100\', 97: \'1101\', 113: \'111000\', 63: \'111001000\', 73: \'11100100100\', 82: \'11100100101\', 66: \'1110010011000\', 85: \'11100100110010\', 72: \'11100100110011\', 76: \'111001001101\', 86: \'11100100111\', 103: \'11100101\', 118: \'1110011\', 110: \'11101\', 114: \'11110\', 109: \'11111\'}.....................xc7\x95\x19\xae\xf9\xf1\xdblsP\xda\x1b\xdf?8\xcd\xfc\xdb\x9e0\xd9"%\x85\xf7\x95\x18\xe2\xc9\xc0\x05
             """
 
+    def decompressor(self,filePath):
+        """This section compresses the file"""
+        fileName,fileExtention=os.path.splitext(filePath)
+        outputFilePath=fileName + "_decompressed.txt"
+        with open(filePath,'rb') as file, open(outputFilePath,'x') as file2:
+            chunk = file.read(8)
+            dictLen = int(chunk.decode('utf-8'))
+            encodingDictStr = file.read(dictLen)
+            encodingDict = eval(encodingDictStr.decode('utf-8'))
+            readBin = bin(int(file.read().hex(),16))[2:]
+            readBin = readBin[:-(8+int(readBin[-8:],2))]
+
+            minLen = len(min(encodingDict,key=len))
+            maxLen = len(max(encodingDict,key=len))
+
+            ind = 0
+            decodedStr = ''
+            while ind<len(readBin):
+                for i in range(minLen,maxLen+1):
+                    enc = readBin[ind:ind+i] 
+                    if enc in encodingDict:
+                        decodedStr += chr(encodingDict[enc]) 
+                        ind = ind+i
+                        break
+            file2.write(decodedStr)
 
 
 
