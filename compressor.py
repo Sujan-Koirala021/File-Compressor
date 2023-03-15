@@ -1,5 +1,5 @@
 import os
-import heapq
+from heaps import heappush, heappop
 
 class compress:
     def __init__(self):
@@ -41,24 +41,24 @@ class compress:
 
         for key in frequency:
             heapNode=self.heap_node(key,frequency[key])
-            heapq.heappush(self.heapQueue,heapNode)
+            heappush(self.heapQueue,heapNode)
         return self.heapQueue
     
     def huffmanTree(self):
         #make huffman tree
         while(len(self.heapQueue)>1):
-            node1=heapq.heappop(self.heapQueue)
-            node2=heapq.heappop(self.heapQueue)
+            node1=heappop(self.heapQueue)
+            node2=heappop(self.heapQueue)
 
             huffman_tree=self.heap_node(None,node1.frequency + node2.frequency)
             huffman_tree.leftChild=node1
             huffman_tree.rightChild=node2
 
-            heapq.heappush(self.heapQueue,huffman_tree)
+            heappush(self.heapQueue,huffman_tree)
 
     def makeCode(self):
         #make unique codes for characters
-        rootNode=heapq.heappop(self.heapQueue)
+        rootNode=heappop(self.heapQueue)
         self.makeCodeForNodes(rootNode,"")
             
             
