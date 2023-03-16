@@ -1,6 +1,7 @@
 import os
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 import customtkinter
 import tkinter.font as font
 
@@ -44,7 +45,9 @@ homeImg = PhotoImage(file="imgs/home_img.png").subsample(2, 2)
 # Create the image on the canvas without a box-like background
 canvas.create_image(0, 0, anchor="nw", image=homeImg)
 
-
+#   Display success message 
+def displayMessageBox(title, description):
+    messagebox.showinfo(title, description)    #   Show success message box
 
 #   Switch mode on pressing light or dark button
 def switchMode():
@@ -73,18 +76,20 @@ def compressFile():
     
     #   Bin file saved to same location as txt file
     
-    
+    displayMessageBox("Compression Success", "You have succesfully compressed file to same directory.")
     
     pass
 
 def extractFile():
     #    open file dialog for file extraction
     win.filename = filedialog.askopenfilename(initialdir=os.path.normpath("C://"), title = "Select A Binary File", filetypes=(("binary files", "*.bin"),))
-    file_path =win.filename # This prints out selected file name
+    file_path =win.filename 
     print(win.filename) # This prints out selected file name
     # NOw proceed to apply algorithm from this filename
     decompressFile = compress()
     decompressFile.decompressor(file_path)
+    displayMessageBox("Extraction Success", "You have succesfully extracted file to same directory.")
+    
 
 #   Place theme button with light theme default
 button = Button(win, image=lightState, bd = 0, bg = darkThemeBg, activebackground=darkThemeBg, command = switchMode)
